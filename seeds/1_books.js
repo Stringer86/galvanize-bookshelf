@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-/* eslint-disable camelcase */
+/* eslint-disable max-len, camelcase */
 
 'use strict';
 
