@@ -8,7 +8,7 @@ const { camelizeKeys, decamelizeKeys } = require('humps');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
-// YOUR CODE HERe
+// YOUR CODE HERE
 router.get('/books', (_req, res, next) => {
   knex('books')
     .orderBy('title')
@@ -24,7 +24,7 @@ router.get('/books', (_req, res, next) => {
 
 router.get('/books/:id', (req, res, next) => {
   if (isNaN(req.params.id)) {
-    throw boom.create(404, 'Not Found');
+    return next(boom.create(404, 'Not Found'));
   }
   knex('books')
   .where('id', req.params.id)
@@ -82,7 +82,7 @@ router.post('/books', (req, res, next) => {
 
 router.patch('/books/:id', (req, res, next) => {
   if (isNaN(req.params.id)) {
-    throw boom.create(404, 'Not Found');
+    return next(boom.create(404, 'Not Found'));
   }
   knex('books')
     .where('id', req.params.id)
@@ -127,7 +127,7 @@ router.patch('/books/:id', (req, res, next) => {
 
 router.delete('/books/:id', (req, res, next) => {
   if (isNaN(req.params.id)) {
-    throw boom.create(404, 'Not Found');
+    return next(boom.create(404, 'Not Found'));
   }
   let book;
 
