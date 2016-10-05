@@ -24,21 +24,21 @@ router.get('/books', (_req, res, next) => {
 
 router.get('/books/:id', (req, res, next) => {
   if (isNaN(req.params.id)) {
-    return next(boom.create(404, 'Not Found'));
+    return next();
   }
   knex('books')
   .where('id', req.params.id)
-  .first()
+  .first() // gets first row.
   .then((row) => {
     if (!row) {
-      throw boom.create(404, 'Not Found');
+      throw boom.create(404, 'Not Found'); // throws it
     }
 
     const book = camelizeKeys(row);
 
     res.send(book);
   })
-  .catch((err) => {
+  .catch((err) => { //catches error from line 34
     next(err);
   });
 });
@@ -82,7 +82,7 @@ router.post('/books', (req, res, next) => {
 
 router.patch('/books/:id', (req, res, next) => {
   if (isNaN(req.params.id)) {
-    return next(boom.create(404, 'Not Found'));
+    return next();
   }
   knex('books')
     .where('id', req.params.id)
@@ -127,7 +127,7 @@ router.patch('/books/:id', (req, res, next) => {
 
 router.delete('/books/:id', (req, res, next) => {
   if (isNaN(req.params.id)) {
-    return next(boom.create(404, 'Not Found'));
+    return next();
   }
   let book;
 
