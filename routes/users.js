@@ -19,7 +19,7 @@ router.post('/users', (req, res, next) => {
   if (!lastName || !lastName.trim()) {
     return next(boom.create(400, 'Last name must not be blank'));
   }
-  
+
   if (!email || !email.trim()) {
     return next(boom.create(400, 'Email must not be blank'));
   }
@@ -28,22 +28,31 @@ router.post('/users', (req, res, next) => {
     return next(boom.create(400, 'Password must be at least 8 characters long'));
   }
 
-  bcrypt.hash(password, 12)
-    .then((hashedPassword) => {
-      const insertUser = { firstName, lastName, email, hashedPassword };
+  knex('users').where('email', email).then((row) => {
+    if (row.length === 1) {
+      return next(boom.create(400, 'Email already exists'));
+    }
+    bcrypt.hash(password, 12)
+      .then((hashedPassword) => {
+        const insertUser = { firstName, lastName, email, hashedPassword };
 
-      return knex('users').insert(decamelizeKeys(insertUser), '*');
-    })
-    .then((rows) => {
-      const user = camelizeKeys(rows[0]);
+        return knex('users').insert(decamelizeKeys(insertUser), '*');
+      })
+      .then((rows) => {
+        const user = camelizeKeys(rows[0]);
 
-      delete user.hashedPassword;
+        delete user.hashedPassword;
 
-      res.send(user);
-    })
-    .catch((err) => {
-      next(err);
-    });
+        res.send(user);
+      })
+      .catch((err) => {
+        next(err);
+      });
+
+  });
+
+
+
 });
 
 module.exports = router;
