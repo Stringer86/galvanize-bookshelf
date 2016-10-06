@@ -12,7 +12,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.table('users', (table) => {
-    table.dropColumn('hashed_password');
-  });
+  return knex.schema.dropTable('users');
 };
