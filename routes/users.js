@@ -1,3 +1,5 @@
+/* eslint-disable max-len, camelcase, new-cap */
+
 'use strict';
 
 const bcrypt = require('bcrypt-as-promised');
@@ -48,11 +50,7 @@ router.post('/users', (req, res, next) => {
       .catch((err) => {
         next(err);
       });
-
   });
-
-
-
 });
 
 module.exports = router;

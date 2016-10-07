@@ -1,3 +1,5 @@
+/* eslint-disable max-len, camelcase, new-cap */
+
 'use strict';
 
 const boom = require('boom');
@@ -5,24 +7,25 @@ const bcrypt = require('bcrypt-as-promised');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const knex = require('../knex');
-const { camelizeKeys, decamelizeKeys } = require('humps');
+const { camelizeKeys } = require('humps'); // decamelizeKeys not used in this file
 
-const router = express.Router(); //allows middleware (post, get...)
+const router = express.Router(); // allows middleware (post, get...)
 
 const authorize = function(req, res, next) {
-  jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
+  jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, _decoded) => {
     if (err) {
       req.verify = false;
-    } else {
+    }
+    else {
       req.verify = true;
     }
     next();
   });
 };
 
-router.get('/token', authorize, (req, res, next) => {
+router.get('/token', authorize, (req, res, _next) => {
   res.send(req.verify);
-})
+});
 
 router.post('/token', (req, res, next) => {
   const { email, password } = req.body;
@@ -73,7 +76,7 @@ router.post('/token', (req, res, next) => {
     });
 });
 
-router.delete('/token', (req, res, next) => {
+router.delete('/token', (req, res, _next) => {
   res.clearCookie('token');
   res.send(true);
 });

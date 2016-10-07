@@ -1,3 +1,5 @@
+/* eslint-disable max-len, camelcase, new-cap */
+
 'use strict';
 
 const boom = require('boom');
@@ -38,7 +40,7 @@ router.get('/books/:id', (req, res, next) => {
 
     res.send(book);
   })
-  .catch((err) => { //catches error from line 34
+  .catch((err) => { // catches error from line 34
     next(err);
   });
 });
