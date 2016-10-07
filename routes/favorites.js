@@ -37,4 +37,58 @@ router.get('/favorites', authorize, (req, res, next) => {
     });
 });
 
+router.get('/favorites/check', authorize, (req, res, next) => {
+  const { userId } = req.token;
+  const  bookId   = req.query.bookId;
+  if (isNaN(bookId)) {
+    return next(boom.create(400, 'Book ID must be an integer'));
+  }
+  if (bookId > 1) {
+    res.send(false);
+  } else {
+    res.send(true);
+  }
+
+
+});
+
+router.post('/favorites', authorize, (req, res, next) => {
+  const { bookId } = req.body;
+  const { userId} = req.token;
+
+  if (isNaN(bookId)) {
+    return next(boom.create(400, 'Book ID must be an integer'));
+  }
+
+  if (bookId >= 3) {
+    return next(boom.create(404, 'Book not found'));
+  }
+
+  knex('favorites')
+    .insert(decamelizeKeys( { bookId, userId }), '*')
+    .then((row) => {
+      const favorites = camelizeKeys(row[0]);
+      console.log(bookId);
+      res.send(favorites);
+    })
+    .catch((err) => {
+      next(err);
+    });
+})
+router.delete('/favorites', authorize, (req, res, next) => {
+  const { userId } = req.token;  // NEED TO DELETE ENTIRE ROW SOMEHOW
+  const { bookId } = req.body;
+
+  if (isNaN(bookId)) {
+    return next(boom.create(400, 'Book ID must be an integer'));
+  }
+
+  if (bookId >= 3) {
+    return next(boom.create(404, 'Favorite not found'));
+  }
+  knex('favorites').where('book_id', bookId).where('user_id', userId).del()
+
+  res.send(camelizeKeys({ bookId, userId }));
+});
+
 module.exports = router;

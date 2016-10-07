@@ -9,6 +9,21 @@ const { camelizeKeys, decamelizeKeys } = require('humps');
 
 const router = express.Router(); //allows middleware (post, get...)
 
+const authorize = function(req, res, next) {
+  jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      req.verify = false;
+    } else {
+      req.verify = true;
+    }
+    next();
+  });
+};
+
+router.get('/token', authorize, (req, res, next) => {
+  res.send(req.verify);
+})
+
 router.post('/token', (req, res, next) => {
   const { email, password } = req.body;
 
@@ -60,7 +75,7 @@ router.post('/token', (req, res, next) => {
 
 router.delete('/token', (req, res, next) => {
   res.clearCookie('token');
-  res.sendStatus(200);
+  res.send(true);
 });
 
 module.exports = router;
