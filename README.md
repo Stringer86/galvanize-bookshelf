@@ -1,3 +1,5 @@
+https://github.com/Stringer86/galvanize-bookshelf
+
 #### [⇐ Previous](5_heroku_deployment.md) | [Next ⇒](1_migrations_seeds.md)
 
 # Galvanize Bookshelf
