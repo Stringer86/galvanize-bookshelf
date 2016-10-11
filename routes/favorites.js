@@ -63,16 +63,16 @@ router.post('/favorites', authorize, (req, res, next) => {
   knex('books')
     .where('id', bookId)
     .first()
-    .then((row) => {
-      if (!row) {
+    .then((book) => {
+      if (!book) {
         throw next(boom.create(404, 'Book not found'));
       }
 
       return knex('favorites')
         .insert(decamelizeKeys({ bookId, userId }), '*');
     })
-      .then((insert) => {
-        const book = camelizeKeys(insert[0]);
+      .then((insertedBook) => {
+        const book = camelizeKeys(insertedBook[0]);
 
         res.send(book);
       })
@@ -88,9 +88,6 @@ router.delete('/favorites', authorize, (req, res, next) => {
     return next(boom.create(400, 'Book ID must be an integer'));
   }
 
-  // if (bookId >= 3) {
-  //   return next(boom.create(404, 'Favorite not found'));
-  // }
   knex('favorites')
     .where('book_id', bookId)
     .first()
