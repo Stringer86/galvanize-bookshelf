@@ -1,4 +1,5 @@
 https://stringer86-galvanize-bookshelf.herokuapp.com/
+
 #### [⇐ Previous](5_heroku_deployment.md) | [Next ⇒](1_migrations_seeds.md)
 
 # Galvanize Bookshelf
