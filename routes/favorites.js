@@ -97,7 +97,9 @@ router.delete('/favorites', authorize, (req, res, next) => {
       }
 
       return knex('favorites')
-        .where('book_id', bookId).where('user_id', userId).del();
+        .where('book_id', bookId)
+        .where('user_id', userId)
+        .del();
     })
     .then(() => {
       res.send(camelizeKeys({ bookId, userId }));
